@@ -5,78 +5,65 @@ An entry for make.fun's [Make GTA 6 bounty](https://make.fun/bounty/gta6-01).
 
 # Sunset Bay
 
-An original top-down 2D open-world crime game in plain canvas JavaScript — no build
-step, no libraries, no network, no assets: everything on screen is drawn by the code.
-Sunset Bay is a coastal city of road grids and city blocks, a beach and a pier along
-its south edge, palms, parked cars, wandering pedestrians and ambient traffic. You are
-a nobody with a fixer: five jobs stand between you and $9,500, and the bay's police
-would like a word.
+An original top-down 2D open-world crime game in the browser — no build step, no
+libraries, no assets: one HTML page, a handful of ES modules and a canvas. You are a
+nobody in a seaside city of four avenues and three cross-streets, a beach and the sea.
+A fixer by the west avenue has work. Five jobs, one long day: run them all and the
+bay is yours.
 
-## How to play
+## The game
 
-- **Walk**: WASD or arrow keys. **Enter / exit a car**: walk up to one and press **E**.
-  The teal car by your home is yours; every other car you take is a crime, once per car.
-- **Drive**: W/S or ↑/↓ for throttle, brake and reverse; A/D or ←/→ to steer (it bites
-  harder the faster you go); **Space** is the handbrake — it loosens the rear tyres
-  into a drift and leaves skid marks.
-- Follow the gold marker and the dashed route line. The HUD shows your cash, the day
-  and clock, your wanted stars, the current objective with its distance, and a minimap
-  with the objective and the police on it.
-- **Wanted**: stealing a car, running a pedestrian down and the fixer's dirtier work
-  all raise stars. Police spawn, pursue, and brake to match your speed as they close
-  in rather than ramming forever; if they corner you slow and close, the bust meter
-  fills — get moving or get away. Break sight and range for a while and the stars cool
-  off. Get busted and the day ends: a fine, a new morning, your job half-done.
+- **A living little city** — a 2400×1600 world: a road grid with parked cars and
+  wandering pedestrians, buildings you collide with (kerb included), palms, a sandy
+  beach and water you cannot cross. Smooth follow camera, minimap, day clock.
+- **On foot and behind the wheel** — walk anywhere; press E by any parked car to
+  take it. Cars accelerate, brake and reverse, steer harder the faster they go, and
+  drift on the handbrake, laying skid marks. Cars bounce off each other and off
+  buildings — nothing glues, nothing tunnels.
+- **Police and wanted stars** — steal a car in front of a witness, run someone down,
+  or take the wrong job and the stars rise. Police chase, and brake to match your
+  speed as they close in. Stay close-and-slow too long and you are busted: a fine,
+  and the day goes on. Break away — every patrol car beyond 400 px for a few
+  seconds — and the stars clear.
+- **Five jobs from the fixer** ($9,500 in all): a pickup and delivery ($400), a
+  timed delivery ($900), tailing a mark without being made ($1,800), collecting
+  three packages while the heat rises ($2,400), and the big one — reach the hideout
+  at three stars and lose the police ($4,000). Finish all five for the Day Complete
+  summary, then free-roam.
 
-### Driving the bay
+## Controls
 
-- The coast road is the fastest line in town: when the heat is on, run it end to end
-  instead of weaving blocks — pursuers gain on every slow corner, and the coast has
-  only two.
-- Package pickups are drive-throughs. The circle is generous; slowing to a crawl in
-  front of it with a patrol behind you is how days end early.
-- The tail only starts when you have eyes on the mark — drive to him first, then
-  settle into the band.
-- Watch the brake lights. Yours flare when you check up, and so do theirs: a police
-  car pacing you with its lights lit is matching your speed, not charging.
+| Keys | Action |
+| --- | --- |
+| W A S D / arrows | Walk, drive, steer |
+| E | Enter or exit a car |
+| Space (in a car) | Handbrake — drift |
+| P or Esc | Pause |
 
-## The five jobs
+Follow the amber marker and the dashed route line; the number beside the objective
+is the distance left. The minimap shows roads, your arrow, the objective and
+police blips.
 
-1. **The package** — meet the fixer, collect at the warehouse, deliver to the pier. $400.
-2. **The rush order** — a pickup at Café Lumen, delivered across town against a
-   150-second clock. $900.
-3. **The tail** — follow the orange mark around the east side, holding the distance
-   band: close enough not to lose him, far enough not to spook him, for 40 seconds.
-   $1,800 — and a patrol clocks you doing it.
-4. **Three packages** — collect three drops around the city; every one raises your
-   wanted level. Bring them back to the fixer. $2,400.
-5. **The getaway** — reach the hideout garage at three stars, then lose the police
-   entirely. $4,000.
+## Run it
 
-Finish the chain and the day closes with a **Day complete — $9,500** summary; the bay
-stays open for free-roam afterwards.
+```sh
+node serve.ts            # serves game/ on http://localhost:8080
+# or: node main.ts       # hands the entry in to /output (dossier.json + manifest.json)
+```
 
-## Running it
-
-- Play locally: `node serve.ts` (Node 22), then open http://localhost:8080.
-- Hand it in: `node main.ts` copies `game/` and `screenshots/` to `/output` (or
-  `$MAKEFUN_OUTPUT_DIR`) and writes `dossier.json` with the vendored make.fun library,
-  after checking the three promised renders exist; it also writes `manifest.json`, a
-  sha256 manifest of everything handed in.
-- A `?seed=N` query fixes all of the game's randomness — the same seed always builds
-  the same city. `game/shots.json`'s scenes (`?shot=title|drive|mission`) stage the
-  deterministic screenshots and raise `window.__shotReady` when painted.
+Open the page, press Enter, and go meet the fixer. `?seed=N` fixes the city and the
+day (the same seed always builds the same Sunset Bay); `?shot=title|drive|mission`
+stages a deterministic scene and sets `window.__shotReady` for screenshot capture,
+as listed in `shots.json`.
 
 ## Tech notes
 
-- `game/src/` is six small ES modules: `rng.js` (a seeded mulberry32 and geometry
-  helpers), `world.js` (the seeded city, collision, and the one-time ground render),
-  `actors.js` (car physics with a grip/slide split, pedestrians, and the police
-  driver), `missions.js` (the five-job state machine), `input.js`, and `main.js`
-  (fixed-timestep loop, camera, HUD, minimap, overlays, screenshot staging).
-- The simulation runs on a fixed 1/60 step, so a seed plus an input script replays
-  exactly — which is how the entry is playtested headlessly: a driver script plays
-  the whole chain on real keyboard events and asserts the cash lands on $9,500.
-- Police pursuit is deliberately fair: inside 110px a police car targets the player's
-  speed plus a small closing allowance, inside 55px the player's speed itself, and
-  alongside a stopped player it stops. No teleporting, no endless ramming.
+- `game/` is plain static files: `index.html` plus ES modules under `game/src/`
+  (`config`, `random`, `input`, `world`, `render`, `shots`, `main`). Canvas 2D only.
+- The world steps at a fixed 1/60 s; car physics split velocity into forward and
+  lateral parts so grip, drift and speed-scaled steering fall out of one small
+  integrator. Car-to-car contact is an impulse along the contact normal.
+- `main.ts` (Node 22, standard library only) copies `game/` and `screenshots/` to
+  the output directory, writes the judge's `dossier.json` with the vendored
+  `vendor/makefun-game.ts`, and adds its own `manifest.json`: every handed-in file
+  with its byte size and sha256, failing loudly if a cover screenshot is missing.

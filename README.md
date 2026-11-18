@@ -28,6 +28,18 @@ would like a word.
   fills — get moving or get away. Break sight and range for a while and the stars cool
   off. Get busted and the day ends: a fine, a new morning, your job half-done.
 
+### Driving the bay
+
+- The coast road is the fastest line in town: when the heat is on, run it end to end
+  instead of weaving blocks — pursuers gain on every slow corner, and the coast has
+  only two.
+- Package pickups are drive-throughs. The circle is generous; slowing to a crawl in
+  front of it with a patrol behind you is how days end early.
+- The tail only starts when you have eyes on the mark — drive to him first, then
+  settle into the band.
+- Watch the brake lights. Yours flare when you check up, and so do theirs: a police
+  car pacing you with its lights lit is matching your speed, not charging.
+
 ## The five jobs
 
 1. **The package** — meet the fixer, collect at the warehouse, deliver to the pier. $400.

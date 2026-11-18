@@ -72,6 +72,9 @@ export function stepCar(world, car, ctl, dt, fx) {
     fx.skid(bx - -nfy * 7, by - nfx * 7);
   }
   car.fSpeed = fSpeed;
+  // Brake lights are drawn from this: the pedal is down and the car is shedding
+  // forward speed. Set here, where the pedal and the speed are both known.
+  car.braking = ctl.throttle < 0 && fSpeed > 12;
   return car;
 }
 
@@ -120,8 +123,17 @@ export function drawCar(g, car, t) {
   g.fillRect(6, -7, 3, 14);                            // windscreen shine
   g.fillStyle = '#f5eeda';
   g.fillRect(15, -7, 2, 4); g.fillRect(15, 3, 2, 4);   // headlights
-  g.fillStyle = '#c23b2e';
-  g.fillRect(-17, -7, 2, 4); g.fillRect(-17, 3, 2, 4);
+  if (car.braking) {
+    // Brake lights: a hot core and a halo, so a following driver (or a player
+    // being paced by one) can read the slowdown at a glance.
+    g.fillStyle = 'rgba(255,60,40,0.35)';
+    g.fillRect(-19, -8, 4, 6); g.fillRect(-19, 2, 4, 6);
+    g.fillStyle = '#ff3524';
+    g.fillRect(-17, -7, 2, 4); g.fillRect(-17, 3, 2, 4);
+  } else {
+    g.fillStyle = '#c23b2e';
+    g.fillRect(-17, -7, 2, 4); g.fillRect(-17, 3, 2, 4);
+  }
   if (car.kind === 'police') {
     g.fillStyle = '#f2f2f2'; roundRect(g, -8, -9, 13, 18, 4); g.fill();
     g.fillStyle = '#22242a'; g.fillRect(-8, -9, 13, 5); g.fillRect(-8, 4, 13, 5);

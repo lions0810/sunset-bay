@@ -225,6 +225,15 @@ export function createRenderer(canvas) {
       ctx.lineWidth = 1.6;
       ctx.beginPath(); ctx.roundRect(-20, -10, 40, 20, 5); ctx.stroke();
     }
+    if (car.braking) {
+      // Brake lights: a lit pair at the rear corners, with a little halo in the dusk.
+      ctx.fillStyle = 'rgba(255,60,40,0.35)';
+      ctx.fillRect(-24, -9.5, 2.4, 7);
+      ctx.fillRect(-24, 2.5, 2.4, 7);
+      ctx.fillStyle = '#ff3524';
+      ctx.fillRect(-21.6, -8.5, 3.4, 5);
+      ctx.fillRect(-21.6, 3.5, 3.4, 5);
+    }
     ctx.restore();
   }
 
